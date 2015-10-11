@@ -1,0 +1,12 @@
+<a class="button alphabetic" 
+  ng-click="tap_alphabetic(button)"
+  navigable-leaf-model="button"
+  ng-class="{hover:button.navigable.active}"
+  href>
+  <div ng-hide="has_shift">
+    {{button.content}}
+  </div>
+  <div ng-show="has_shift">
+    {{button.content.toUpperCase()}}
+  </div>
+</a>

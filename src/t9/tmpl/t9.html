@@ -1,0 +1,103 @@
+<div>
+  <div class="modal-body" >
+    <div class="main-frame" >
+      <div class="input-frame" keyboard-input id="input-frame">
+       <div class="input" >
+         <span ng-repeat="letter in container.content.before_letters"><span class="space" ng-if="letter.key==' '">_</span><span ng-if="letter.key!=' '">{{letter.key}}</span></span>
+       </div>
+       <div class="cursor" id="cursor"></div>
+       <div class="input">
+         <span ng-repeat="letter in container.content.after_letters"><span class="space" ng-if="letter.key==' '">_</span><span ng-if="letter.key!=' '">{{letter.key}}</span></span>
+       </div>
+      </div>
+      <div class="delay-frame">
+        <div class="delay-bar" id="delay-bar">
+        </div>
+      </div>
+      <div class="menu-frame">
+        <div class="menu" ng-class="{'disable':mode.menu}">
+          <a class="menu-btn" ng-class="menu_btn.klass" ng-click="controller.to_menu_mode()" href>
+            menu
+          </a>
+        </div>
+      </div>
+      <div class="go-back-frame">
+        <div class="go-back">
+          <a class="go-back-btn" ng-click="controller.prev()" ng-class="back_btn.klass" href>
+            volver
+          </a>
+        </div>
+        <div class="go-back-description">
+          <span ng-hide="!mode.letters">
+            Cerrar teclado
+          </span>
+          <span ng-show="mode.mayusc">
+            Volver a modo minuscula
+          </span>
+          <span ng-show="mode.symbol">
+            Volver a modo texto
+          </span>
+          <span ng-show="mode.numbers">
+            Volver a modo simbolos
+          </span>
+          <span ng-show="mode.menu">
+            Ocultar opciones
+          </span>
+        </div>
+      </div>
+      <div class="buttons-frame" ng-hide="mode.menu">
+        <div ng-hide="mode.numbers" ng-click="controller.next()" class="modes" href>
+          <a class="mode letters" ng-class="{'selected':mode.letters}">
+            abc
+          </a>
+          <a class="mode mayusc" ng-class="{'selected':mode.mayusc}">
+            ABC
+          </a>
+          <a class="mode symbol" ng-class="{'selected':mode.symbol}">
+            @.?,
+          </a>
+          <a class="mode numbers">
+            123
+          </a>
+        </div>
+        <a ng-show="mode.numbers" class="button" ng-class="buttons[0].klass" href>
+          {{buttons[0].key}}
+        </a>
+        <div ng-repeat="button in buttons" ng-show="$index!=0">
+          <a class="button" ng-class="button.klass" href>
+            <div ng-if="button.svg" class="svg-button" inline-svg-model="{{assets}}/t9/{{button.svg}}.svg"></div>
+            <div ng-if="!button.svg" ng-show="button.name">
+              {{button.name}}
+            </div>
+            <div ng-if="!button.svg" ng-show="!button.name">
+              <div ng-hide="!mode.letters">
+                {{button.letters}}
+              </div>
+              <div ng-show="mode.mayusc">
+                {{button.mayusc}}
+              </div>
+              <div ng-show="mode.symbol">
+                <span class="symbol" ng-repeat="symbol in button.symbol">
+                  {{symbol}}
+                </span>
+              </div>
+              <div ng-show="mode.numbers">
+                {{button.number}}
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+      <div class="options-frame" ng-show="mode.menu">
+        <a ng-repeat="option in options" class="option" ng-class="option.klass" href>
+          <div class="option-key">
+            {{option.key}}
+          </div>
+          <div class="option-description">
+            {{option.description}}
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

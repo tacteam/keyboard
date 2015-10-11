@@ -1,0 +1,90 @@
+<div>
+  <div class="modal-body" >
+    <div class="main-frame" >
+      <div class="input-frame" keyboard-input id="input-frame">
+       <div class="input" >
+         <span ng-repeat="letter in container.content.before_letters"><span class="space" ng-if="letter.key==' '">_</span><span ng-if="letter.key!=' '">{{letter.key}}</span></span>
+       </div>
+       <div class="cursor" id="cursor"></div>
+       <div class="input">
+         <span ng-repeat="letter in container.content.after_letters"><span class="space" ng-if="letter.key==' '">_</span><span ng-if="letter.key!=' '">{{letter.key}}</span></span>
+       </div>
+      </div>
+      <div class="letters-frame" ng-controller="tac.keyboard.qwerty.letters">
+        <div ng-repeat="button in buttons">
+          <div ng-include="'qwerty.' + button.kind +'.html'"> </div>
+        </div>
+      </div>
+      <div class="actions-frame" 
+        ng-controller="tac.navigable.horizontal"
+        identifier="image header" 
+        priority="1"
+        >
+        <a class="button shift" 
+          ng-click="$parent.shift()"
+          navigable-leaf="0"
+          navigable-leaf-id="shift-button"
+          navigable-leaf-class="hover"
+          href>
+          <svg class="shift-icon" inline-svg-model="{{assets}}/qwerty/shift.svg"></svg>
+        </a>
+        <a class="button simbols" 
+          ng-click="$parent.simbol()"
+          navigable-leaf="1"
+          navigable-leaf-id="simbol-button"
+          navigable-leaf-class="hover"
+          href>
+          <span>#$%</span>
+        </a>
+        <a class="button space" 
+          ng-click="tap_space()"
+          navigable-leaf="2"
+          navigable-leaf-id="space-button"
+          navigable-leaf-class="hover"
+          href>
+          <span>espacio</span>
+        </a>
+        <a class="button delete"
+          ng-click="container.content.remove_one()"
+          navigable-leaf="3"
+          navigable-leaf-id="delete-button"
+          navigable-leaf-class="hover"
+          href>
+          <span>borrar</span>
+        </a>
+      </div>
+    </div>
+  </div>
+  
+  <div class="modal-footer">
+    <div class="modal-controls"
+      ng-controller="tac.navigable.horizontal"
+      identifier="image header" 
+      priority="2">
+      <a class="modal-close" 
+        navigable-leaf="2"
+        navigable-leaf-id="resume image modal"
+        navigable-leaf-class="hover" 
+        ng-click="confirm()"
+        href >
+        Aceptar
+      </a>
+      <a class="modal-resume" 
+        navigable-leaf="1"
+        navigable-leaf-id="resume image modal"
+        navigable-leaf-class="hover" 
+        ng-click="resume()"
+        href >
+        Cancelar
+      </a>
+      <a class="keyboard-next" 
+        navigable-leaf="0"
+        navigable-leaf-id="resume image modal"
+        navigable-leaf-class="hover" 
+        ng-click="container.to_t9()"
+        href >
+        Teclado T9
+      </a>
+    </div>
+  </div>
+</div>

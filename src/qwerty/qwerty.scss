@@ -1,0 +1,197 @@
+.modal.qwerty-dialog{
+  height: 720px;
+  overflow-y: hidden;
+  .modal-dialog{
+    width: 80%;
+    min-width: 800px;
+    margin: 30px auto 0 auto;
+    overflow-y: hidden;
+    .modal-content{
+      box-shadow:none;
+      border:none;
+      background-color: transparent;
+      .modal-body{
+        background-color:#394249;
+        .main-frame{
+          width: 840px;
+          margin-left:85px;
+          height: 500px;
+          .imput-frame2{
+            margin: 8px;
+            width: 784px;
+            height: 70px;
+            border: 1px solid white;
+            .input{
+              float: left;
+              width: auto;
+              height: 70px;
+              font-family: 'Roboto';
+              font-weight: 300;
+              font-size: 36px;
+              text-indent: 10px;
+              color: white;
+              border: none;
+              line-height: 70px;
+            }
+            .cursor{
+              float: left;
+              display:block;
+              margin-top: 10px;
+              margin-left: 3px;
+              width: 5px;
+              height: 50px;
+              background-color: white;
+              @include cursor-blink;
+            }
+          }
+          .input-frame{
+            margin: 8px;
+            padding-left: 10px;
+            padding-right: 10px;
+            width: 784px;
+            height: 70px;
+            overflow: hidden;
+            display: -webkit-box;
+            border: 3px solid white;
+            .input{
+              margin: 0;
+              height: 70px;
+              width: auto;
+              font-family: 'Roboto';
+              font-weight: 300;
+              font-size: 50px;
+              text-indent: 0px;
+              color: white;
+              border: none;
+              line-height: 60px;
+              display:block;
+              white-space: nowrap;
+              .space{
+                line-height: 60px;
+                font-size: 40px;
+                color: #5B7191;
+                margin-left: 5px;
+                margin-left: 5px;
+              }
+            }
+            .cursor{
+              padding: 0 5px;
+              display:block;
+              margin: 10px 3px 0 6px;
+              width: 5px;
+              height: 50px;
+              background-color: white;
+              @include cursor-blink;
+            }
+          }
+          .letters-frame,
+          .actions-frame{
+            .button{
+              text-transform: none;
+              letter-spacing: normal;
+              display: block;
+              padding: 0px;
+              background-color: transparent;
+              text-decoration: none;
+              font-family: 'Roboto';
+              font-weight: 300;
+              color: white;
+              width: 64px;
+              height: 64px;
+              margin: 8px;
+              border-radius:0;
+              border: 3px solid white;
+              float: left;
+              font-size: 36px;
+              line-height: 60px;
+              text-align: center;
+              .alphabetic{
+                line-height: 54px;
+              }
+              &.shift{
+                font-size: 50px;
+                .shift-icon{
+                  width: 40px;
+                  height: 40px;
+                }
+                .shift-icon *{
+                  fill: #FFF;
+                }
+              }
+              &.shift,
+              &.simbols{
+                width: 104px;
+              }
+              &.delete{
+                width: 144px;
+                line-height: 54px;
+              }
+              &.space{
+                width: 384px;
+                line-height: 54px;
+              }
+              &.hover,
+              &:hover{
+                background-color:#757b80;
+                color:#fff;
+              }
+            }
+          }
+        }
+      }
+      .modal-footer{
+        border-top:0;
+        margin-top:0;
+        padding:20px 0;
+        .modal-controls{
+          .modal-resume,
+          .modal-close,
+          .keyboard-next{
+            display: block;
+            height: 60px;
+            width: 200px;
+            color: white;
+            font-size: 30px;
+            line-height: 60px;
+            text-align: center;
+            text-decoration: none;
+            font-family: 'Roboto';
+            border-radius:0;
+            font-weight: 400;
+          }
+          .modal-resume,
+          .modal-close{
+            margin-left: 10px;
+            float: right;
+          }
+          .modal-resume{
+            background-color: #973345;
+            opacity:0.85;
+            &.hover,
+            &:hover{
+              opacity:1;
+            }
+          }
+          .modal-close{
+            background-color: #437d51;
+            opacity:0.85;
+            &.hover,
+            &:hover{
+              opacity:1;
+            }
+          }
+          .keyboard-next{
+            background-color: #405284;
+            opacity:0.85;
+            float: left;
+            &.hover,
+            &:hover{
+              opacity:1;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
