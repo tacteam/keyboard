@@ -1,7 +1,7 @@
 # packaged tac-keyboard
 
 This repo is for distribution on `bower`. The source for this module is in the
-[main TacTeam repo](https://github.com/tacteam/navigable).
+[main TacTeam repo](https://github.com/tacteam/keyboard).
 Please file issues and pull requests against that repo.
 
 ## Install

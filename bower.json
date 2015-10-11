@@ -2,7 +2,7 @@
   "name": "tac-keyboard",
   "version": "0.0.1",
   "authors": [
-    "alejandrocastrounqui <alejandrocastrounqui@gmail.com>"
+    "tacteam <tacteamunq@gmail.com>"
   ],
   "description": "angular keyboard navigation components",
   "main": "dist/keyboard.js",
