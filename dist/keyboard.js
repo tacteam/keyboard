@@ -1,120 +1,5 @@
 (function() {
   'use strict';
-  angular.module('module.tac.keyboard').factory('tac.keyboard.content', [
-    function() {
-      var letters, set_content;
-      letters = function(text) {
-        var index, letter, result, _i, _len;
-        result = [];
-        for (index = _i = 0, _len = text.length; _i < _len; index = ++_i) {
-          letter = text[index];
-          result.push({
-            key: letter,
-            index: index
-          });
-        }
-        return result;
-      };
-      set_content = function(container) {
-        var content;
-        content = container.content = {};
-        content.erase = function() {
-          content.before = '';
-          content.after = '';
-          return content.sanitize();
-        };
-        content.write = function(letter) {
-          content.before += letter;
-          return content.sanitize();
-        };
-        content.remove_one = function() {
-          content.before = content.before.substring(0, content.before.length - 1);
-          return content.sanitize();
-        };
-        content.rewrite = function(letter) {
-          content.before = content.before.substring(0, content.before.length - 1) + letter;
-          return content.sanitize();
-        };
-        content.init = function() {
-          content.before = container.text;
-          content.after = '';
-          return content.sanitize();
-        };
-        content.left = function() {
-          var last;
-          if (this.before.length > 0) {
-            last = this.before.charAt(this.before.length - 1);
-            this.after = last + this.after;
-            this.before = this.before.substring(0, this.before.length - 1);
-            this.sanitize();
-            return true;
-          }
-        };
-        content.right = function() {
-          var first;
-          if (this.after.length > 0) {
-            first = this.after.charAt(0);
-            this.before += first;
-            this.after = this.after.substring(1, this.after.length);
-            this.sanitize();
-            return true;
-          }
-        };
-        return content.sanitize = function() {
-          container.text = content.before + content.after;
-          content.before_letters = letters(content.before);
-          return content.after_letters = letters(content.after);
-        };
-      };
-      return {
-        process: function(container) {
-          if (!container.content) {
-            set_content(container);
-          }
-          return container.content.init();
-        }
-      };
-    }
-  ]);
-
-}).call(this);
-
-(function() {
-  'use strict';
-  angular.module('module.tac.keyboard').directive('keyboardInput', [
-    function() {
-      var fix, scroll_offset;
-      scroll_offset = 60;
-      fix = function(frame, cursor) {
-        var fix_cursor_position, ol, sL, sW;
-        fix_cursor_position = function() {};
-        ol = cursor[0].offsetLeft;
-        sW = frame[0].scrollLeft + frame[0].clientWidth;
-        sL = frame[0].scrollLeft;
-        if (ol > sW - scroll_offset) {
-          frame.scrollLeft(cursor[0].offsetLeft - frame[0].clientWidth + scroll_offset);
-        }
-        if (ol < sL + scroll_offset) {
-          return frame.scrollLeft(cursor[0].offsetLeft - scroll_offset);
-        }
-      };
-      return {
-        restrict: 'A',
-        link: function(scope, element, attrs) {
-          var cursor;
-          cursor = element.find('#cursor');
-          return scope.$watch(function() {
-            return fix(element, cursor);
-          });
-        }
-      };
-    }
-  ]);
-
-}).call(this);
-
-(function() {
-  'use strict';
   angular.module('module.tac.keyboard', ['angularLocalStorage', 'module.tac.navigable', 'module.tac.svg']).factory('tac.keyboard', [
     '$modal', 'tac.keys', 'storage', function($modal, keys, storage) {
       var assets, keyboard, keyboards, last_keyboard, open, storage_id;
@@ -243,6 +128,121 @@
               return exit_callbacks.push(callback);
             }
           };
+        }
+      };
+    }
+  ]);
+
+}).call(this);
+
+(function() {
+  'use strict';
+  angular.module('module.tac.keyboard').factory('tac.keyboard.content', [
+    function() {
+      var letters, set_content;
+      letters = function(text) {
+        var index, letter, result, _i, _len;
+        result = [];
+        for (index = _i = 0, _len = text.length; _i < _len; index = ++_i) {
+          letter = text[index];
+          result.push({
+            key: letter,
+            index: index
+          });
+        }
+        return result;
+      };
+      set_content = function(container) {
+        var content;
+        content = container.content = {};
+        content.erase = function() {
+          content.before = '';
+          content.after = '';
+          return content.sanitize();
+        };
+        content.write = function(letter) {
+          content.before += letter;
+          return content.sanitize();
+        };
+        content.remove_one = function() {
+          content.before = content.before.substring(0, content.before.length - 1);
+          return content.sanitize();
+        };
+        content.rewrite = function(letter) {
+          content.before = content.before.substring(0, content.before.length - 1) + letter;
+          return content.sanitize();
+        };
+        content.init = function() {
+          content.before = container.text;
+          content.after = '';
+          return content.sanitize();
+        };
+        content.left = function() {
+          var last;
+          if (this.before.length > 0) {
+            last = this.before.charAt(this.before.length - 1);
+            this.after = last + this.after;
+            this.before = this.before.substring(0, this.before.length - 1);
+            this.sanitize();
+            return true;
+          }
+        };
+        content.right = function() {
+          var first;
+          if (this.after.length > 0) {
+            first = this.after.charAt(0);
+            this.before += first;
+            this.after = this.after.substring(1, this.after.length);
+            this.sanitize();
+            return true;
+          }
+        };
+        return content.sanitize = function() {
+          container.text = content.before + content.after;
+          content.before_letters = letters(content.before);
+          return content.after_letters = letters(content.after);
+        };
+      };
+      return {
+        process: function(container) {
+          if (!container.content) {
+            set_content(container);
+          }
+          return container.content.init();
+        }
+      };
+    }
+  ]);
+
+}).call(this);
+
+(function() {
+  'use strict';
+  angular.module('module.tac.keyboard').directive('keyboardInput', [
+    function() {
+      var fix, scroll_offset;
+      scroll_offset = 60;
+      fix = function(frame, cursor) {
+        var fix_cursor_position, ol, sL, sW;
+        fix_cursor_position = function() {};
+        ol = cursor[0].offsetLeft;
+        sW = frame[0].scrollLeft + frame[0].clientWidth;
+        sL = frame[0].scrollLeft;
+        if (ol > sW - scroll_offset) {
+          frame.scrollLeft(cursor[0].offsetLeft - frame[0].clientWidth + scroll_offset);
+        }
+        if (ol < sL + scroll_offset) {
+          return frame.scrollLeft(cursor[0].offsetLeft - scroll_offset);
+        }
+      };
+      return {
+        restrict: 'A',
+        link: function(scope, element, attrs) {
+          var cursor;
+          cursor = element.find('#cursor');
+          return scope.$watch(function() {
+            return fix(element, cursor);
+          });
         }
       };
     }
