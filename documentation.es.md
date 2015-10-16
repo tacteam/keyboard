@@ -14,7 +14,7 @@ Sientase a gusto de reportar problemas o proponer nuevas *features* en este repo
 
 ### bower
 
-Este módulo puede ser intalado con `bower`.
+Este módulo puede ser instalado con `bower`.
 
 ```shell
 bower install tac-keyboard
