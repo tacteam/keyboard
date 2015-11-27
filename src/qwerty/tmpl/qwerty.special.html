@@ -1,0 +1,12 @@
+<a class="button key-button-special" 
+  ng-click="tap_special(button)"
+  navigable-leaf="button special"
+  navigable-leaf-active="$index==0"
+  href>
+  <div ng-hide="has_simbol">
+    {{button.content}}
+  </div>
+  <div ng-show="has_simbol">
+    {{button.special}}
+  </div>
+</a>

@@ -1,12 +1,17 @@
 <a class="button alphabetic" 
   ng-click="tap_alphabetic(button)"
-  navigable-leaf-model="button"
-  ng-class="{hover:button.navigable.active}"
+  navigable-leaf="button alphabetic"
   href>
-  <div ng-hide="has_shift">
+  <div ng-hide="has_shift || has_simbol">
     {{button.content}}
   </div>
-  <div ng-show="has_shift">
+  <div ng-show="has_shift && !has_simbol">
     {{button.content.toUpperCase()}}
+  </div>
+  <div ng-show="!has_shift && has_simbol">
+    {{button.special}}
+  </div>
+  <div ng-show="has_shift && has_simbol">
+    {{button.special.toUpperCase()}}
   </div>
 </a>

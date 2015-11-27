@@ -253,35 +253,111 @@
 (function() {
   'use strict';
   angular.module('module.tac.keyboard').controller('tac.keyboard.qwerty', [
-    '$scope', '$modalInstance', 'tac.keys', 'tac.navigable.root', 'tac.navigable.extensible', 'tac.keyboard.content', 'container', function($scope, $modalInstance, control, root_component, extensible, content, container) {
-      var append_character, modal_root;
+    '$scope', '$modalInstance', 'tac.keys', 'tac.navigable.root', 'tac.navigable.component', 'tac.keyboard.qwerty.symbols', 'tac.keyboard.content', 'container', function($scope, $modalInstance, control, root_component, component, symbols, content, container) {
+      var append_character, append_letter, keys, modal_root;
       $scope.assets = container.assets;
+      keys = {
+        real_alt: false,
+        real_acute: false,
+        real_shift: false,
+        real_caps_lock: false,
+        virtual_shift: false,
+        virtual_caps_lock: false,
+        last_virtual_shift: 0,
+        relapse_delay: 800,
+        sanitize: function() {
+          if ((this.real_caps_lock ? !this.virtual_caps_lock : this.virtual_caps_lock)) {
+            $scope.has_shift = $scope.caps_lock = true;
+          } else {
+            $scope.has_shift = $scope.caps_lock = this.virtual_caps_lock = this.real_caps_lock = false;
+          }
+          if (this.virtual_shift || this.real_shift) {
+            $scope.has_shift = !$scope.has_shift;
+          }
+          return this.real_acute = false;
+        }
+      };
       content.process(container);
       modal_root = root_component('modal-keyboard-root');
       $modalInstance.result["finally"](function() {
         return control.unsubscribe(modal_root);
       });
       control.subscribe(modal_root);
-      $scope.navigable = extensible.create_vertical('modal-keyboard-main').set_priority(2).bind_to($scope, true);
-      $scope.navigable.handlers.go_back = function() {
+      $scope.navigable = component.vertical('modal-keyboard-main').set_priority(2).bind_to($scope, true);
+      $scope.navigable.handlers.go_back = function(code, owner) {
         $modalInstance.dismiss();
         return true;
       };
-      $scope.container = container;
-      append_character = function(character) {
-        $scope.has_shift = false;
-        $scope.has_simbol = false;
-        return container.content.write(character);
+      $scope.navigable.handlers.unknow = function(code, owner) {
+        var symbol;
+        if (keys.real_shift) {
+          symbol = symbols.special.shift[code.value];
+        } else {
+          symbol = symbols.special[code.value];
+        }
+        symbol && append_character(symbol);
+        return $scope.$apply();
       };
-      $scope.tap = function(button) {
-        return append_character(button.content);
+      $scope.navigable.handlers.letter = function(code, owner) {
+        append_letter(code.letter);
+        return $scope.$apply();
+      };
+      $scope.navigable.handlers.number = function(code, owner) {
+        var symbol;
+        if (keys.real_alt) {
+          (symbol = symbols.alt[code.number]) && append_character(symbol);
+        } else if (keys.real_shift) {
+          (symbol = symbols.shift[code.number]) && append_character(symbol);
+        } else {
+          append_character(code.number);
+        }
+        return $scope.$apply();
+      };
+      $scope.navigable.handlers.space_bar = function(code, owner) {
+        append_letter(' ');
+        return $scope.$apply();
+      };
+      $scope.navigable.handlers.alt_gr = function(code, owner) {
+        return keys.real_alt = !code.disable;
+      };
+      $scope.navigable.handlers.acute = function(code, owner) {
+        return keys.real_acute = true;
+      };
+      $scope.navigable.handlers['delete'] = function(code, owner) {
+        container.content.remove_one();
+        return $scope.$apply();
+      };
+      $scope.navigable.handlers.shift = function(code, owner) {
+        keys.real_shift = !code.disable;
+        keys.virtual_shift = false;
+        keys.sanitize();
+        return $scope.$apply();
+      };
+      $scope.navigable.handlers.caps_lock = function(code, owner) {
+        keys.real_caps_lock = !keys.real_caps_lock;
+        keys.sanitize();
+        return $scope.$apply();
+      };
+      $scope.container = container;
+      $scope.set_active = function(algo) {
+        return console.log(algo);
+      };
+      append_character = function(character) {
+        container.content.write(character);
+        $scope.has_simbol = false;
+        if (keys.virtual_shift) {
+          keys.virtual_shift = false;
+        }
+        return keys.sanitize();
+      };
+      append_letter = function(letter) {
+        if (keys.real_acute) {
+          letter = symbols.acute[letter] || letter;
+        }
+        return append_character($scope.has_shift ? letter.toUpperCase() : letter);
       };
       $scope.tap_alphabetic = function(button) {
-        if ($scope.has_shift) {
-          return append_character(button.content.toUpperCase());
-        } else {
-          return append_character(button.content);
-        }
+        return append_letter(button.content);
       };
       $scope.tap_special = function(button) {
         if ($scope.has_simbol) {
@@ -294,11 +370,16 @@
         return append_character(' ');
       };
       $scope.shift = function() {
-        if ($scope.has_shift) {
-          return $scope.has_shift = false;
+        var previous_virtual_shift;
+        previous_virtual_shift = keys.last_virtual_shift;
+        keys.last_virtual_shift = (new Date).getTime();
+        if (keys.last_virtual_shift - previous_virtual_shift < keys.relapse_delay) {
+          keys.virtual_caps_lock = !keys.virtual_caps_lock;
+          keys.virtual_shift = false;
         } else {
-          return $scope.has_shift = true;
+          keys.virtual_shift = !keys.virtual_shift;
         }
+        return keys.sanitize();
       };
       $scope.simbol = function() {
         if ($scope.has_simbol) {
@@ -316,145 +397,102 @@
       };
     }
   ]).controller('tac.keyboard.qwerty.letters', [
-    '$scope', 'tac.navigable.extensible', 'tac.keyboard.qwerty.buttons', '$timeout', function($scope, extensible, buttons, $timeout) {
-      $scope.navigable = extensible.create_multiline('modal-letters-frame', 10).set_priority(0).bind_to($scope);
+    '$scope', 'tac.navigable.component', 'tac.keyboard.qwerty.buttons', function($scope, component, buttons) {
+      $scope.navigable = component.multiline('modal-letters-frame', 10).set_priority(1).bind_to($scope);
       return $scope.buttons = buttons;
     }
-  ]).factory('tac.keyboard.qwerty.buttons', [
-    function() {
-      return [
-        {
-          kind: 'button.special',
-          content: '1',
-          special: '!'
-        }, {
-          kind: 'button.special',
-          content: '2',
-          special: '"'
-        }, {
-          kind: 'button.special',
-          content: '3',
-          special: '·'
-        }, {
-          kind: 'button.special',
-          content: '4',
-          special: '$'
-        }, {
-          kind: 'button.special',
-          content: '5',
-          special: '%'
-        }, {
-          kind: 'button.special',
-          content: '6',
-          special: '&'
-        }, {
-          kind: 'button.special',
-          content: '7',
-          special: '/'
-        }, {
-          kind: 'button.special',
-          content: '8',
-          special: '('
-        }, {
-          kind: 'button.special',
-          content: '9',
-          special: ')'
-        }, {
-          kind: 'button.special',
-          content: '0',
-          special: '='
-        }, {
-          kind: 'alphabetic',
-          content: 'q'
-        }, {
-          kind: 'alphabetic',
-          content: 'w'
-        }, {
-          kind: 'alphabetic',
-          content: 'e'
-        }, {
-          kind: 'alphabetic',
-          content: 'r'
-        }, {
-          kind: 'alphabetic',
-          content: 't'
-        }, {
-          kind: 'alphabetic',
-          content: 'y'
-        }, {
-          kind: 'alphabetic',
-          content: 'u'
-        }, {
-          kind: 'alphabetic',
-          content: 'i'
-        }, {
-          kind: 'alphabetic',
-          content: 'o'
-        }, {
-          kind: 'alphabetic',
-          content: 'p'
-        }, {
-          kind: 'alphabetic',
-          content: 'a'
-        }, {
-          kind: 'alphabetic',
-          content: 's'
-        }, {
-          kind: 'alphabetic',
-          content: 'd'
-        }, {
-          kind: 'alphabetic',
-          content: 'f'
-        }, {
-          kind: 'alphabetic',
-          content: 'g'
-        }, {
-          kind: 'alphabetic',
-          content: 'h'
-        }, {
-          kind: 'alphabetic',
-          content: 'j'
-        }, {
-          kind: 'alphabetic',
-          content: 'k'
-        }, {
-          kind: 'alphabetic',
-          content: 'l'
-        }, {
-          kind: 'alphabetic',
-          content: "ñ"
-        }, {
-          kind: 'alphabetic',
-          content: 'z'
-        }, {
-          kind: 'alphabetic',
-          content: 'x'
-        }, {
-          kind: 'alphabetic',
-          content: 'c'
-        }, {
-          kind: 'alphabetic',
-          content: 'v'
-        }, {
-          kind: 'alphabetic',
-          content: 'b'
-        }, {
-          kind: 'alphabetic',
-          content: 'n'
-        }, {
-          kind: 'alphabetic',
-          content: 'm'
-        }, {
-          kind: 'button',
-          content: ','
-        }, {
-          kind: 'button',
-          content: '.'
-        }, {
-          kind: 'button',
-          content: '?'
+  ]).controller('tac.keyboard.qwerty.input', [
+    '$scope', 'tac.navigable.component', function($scope, component) {
+      $scope.navigable.handlers.left = function() {
+        var handle;
+        handle = $scope.container.content.left();
+        if (handle) {
+          $scope.$apply();
         }
-      ];
+        return handle;
+      };
+      return $scope.navigable.handlers.right = function() {
+        var handle;
+        handle = $scope.container.content.right();
+        if (handle) {
+          $scope.$apply();
+        }
+        return handle;
+      };
+    }
+  ]).constant('tac.keyboard.qwerty.symbols', {
+    acute: {
+      'a': 'á',
+      'e': 'é',
+      'i': 'í',
+      'o': 'ó',
+      'u': 'ú'
+    },
+    alt: {
+      2: '@'
+    },
+    shift: {
+      1: '!',
+      3: '#',
+      4: '$',
+      8: '(',
+      9: ')'
+    },
+    special: {
+      188: ',',
+      189: '-',
+      190: '.',
+      192: 'ñ',
+      shift: {
+        188: ';',
+        189: '_',
+        190: ':',
+        192: 'Ñ'
+      }
+    }
+  }).factory('tac.keyboard.qwerty.buttons', [
+    'tac.keyboard.qwerty.symbols', function(symbols) {
+      var ALPHABETIC, SIMPLE, SPECIAL, alphabetic, buttons, map_and_push, simple, simple_s, special;
+      ALPHABETIC = 'alphabetic';
+      SPECIAL = 'special';
+      SIMPLE = 'simple';
+      special = '!"@$%&*()=';
+      alphabetic = 'qwertyuiopasdfghjklñzxcvbnm';
+      simple = ',.?';
+      simple_s = ';:¿';
+      buttons = [];
+      map_and_push = function(text, fn) {
+        var button, character, index, _i, _ref, _results;
+        _results = [];
+        for (index = _i = 0, _ref = text.length - 1; 0 <= _ref ? _i <= _ref : _i >= _ref; index = 0 <= _ref ? ++_i : --_i) {
+          character = text.charAt(index);
+          button = fn(character, index);
+          _results.push(buttons.push(button));
+        }
+        return _results;
+      };
+      map_and_push(special, function(character, index) {
+        return {
+          content: String(index),
+          template: SPECIAL,
+          special: character
+        };
+      });
+      map_and_push(alphabetic, function(character, index) {
+        return {
+          content: character,
+          template: ALPHABETIC,
+          special: symbols.acute[character] || character
+        };
+      });
+      map_and_push(simple, function(character, index) {
+        return {
+          content: character,
+          template: SIMPLE,
+          special: simple_s.charAt(index)
+        };
+      });
+      return buttons;
     }
   ]);
 
@@ -466,43 +504,19 @@ angular.module('module.tac.keyboard').run(['$templateCache', function($templateC
   $templateCache.put('qwerty.alphabetic.html',
     "<a class=\"button alphabetic\" \n" +
     "  ng-click=\"tap_alphabetic(button)\"\n" +
-    "  navigable-leaf-model=\"button\"\n" +
-    "  ng-class=\"{hover:button.navigable.active}\"\n" +
+    "  navigable-leaf=\"button alphabetic\"\n" +
     "  href>\n" +
-    "  <div ng-hide=\"has_shift\">\n" +
+    "  <div ng-hide=\"has_shift || has_simbol\">\n" +
     "    {{button.content}}\n" +
     "  </div>\n" +
-    "  <div ng-show=\"has_shift\">\n" +
+    "  <div ng-show=\"has_shift && !has_simbol\">\n" +
     "    {{button.content.toUpperCase()}}\n" +
     "  </div>\n" +
-    "</a>"
-  );
-
-
-  $templateCache.put('qwerty.button.html',
-    "<a class=\"button key-button\" \n" +
-    "  ng-click=\"tap(button)\"\n" +
-    "  navigable-leaf-model=\"button\"\n" +
-    "  ng-class=\"{hover:button.navigable.active}\"\n" +
-    "  href>\n" +
-    "  <div>\n" +
-    "    {{button.content}}\n" +
-    "  </div>\n" +
-    "</a>\n"
-  );
-
-
-  $templateCache.put('qwerty.button.special.html',
-    "<a class=\"button key-button-special\" \n" +
-    "  ng-click=\"tap_special(button)\"\n" +
-    "  navigable-leaf-model=\"button\"\n" +
-    "  ng-class=\"{hover:button.navigable.active}\"\n" +
-    "  href>\n" +
-    "  <div ng-hide=\"has_simbol\">\n" +
-    "    {{button.content}}\n" +
-    "  </div>\n" +
-    "  <div ng-show=\"has_simbol\">\n" +
+    "  <div ng-show=\"!has_shift && has_simbol\">\n" +
     "    {{button.special}}\n" +
+    "  </div>\n" +
+    "  <div ng-show=\"has_shift && has_simbol\">\n" +
+    "    {{button.special.toUpperCase()}}\n" +
     "  </div>\n" +
     "</a>"
   );
@@ -510,56 +524,65 @@ angular.module('module.tac.keyboard').run(['$templateCache', function($templateC
 
   $templateCache.put('qwerty.html',
     "<div>\n" +
-    "  <div class=\"modal-body\" >\n" +
+    "  <div class=\"modal-body\" \n" +
+    "    navigable-vertical=\"qwerty modal body\"\n" +
+    "    navigable-priority=\"0\"\n" +
+    "    >\n" +
     "    <div class=\"main-frame\" >\n" +
-    "      <div class=\"input-frame\" keyboard-input id=\"input-frame\">\n" +
-    "       <div class=\"input\" >\n" +
-    "         <span ng-repeat=\"letter in container.content.before_letters\"><span class=\"space\" ng-if=\"letter.key==' '\">_</span><span ng-if=\"letter.key!=' '\">{{letter.key}}</span></span>\n" +
-    "       </div>\n" +
-    "       <div class=\"cursor\" id=\"cursor\"></div>\n" +
-    "       <div class=\"input\">\n" +
-    "         <span ng-repeat=\"letter in container.content.after_letters\"><span class=\"space\" ng-if=\"letter.key==' '\">_</span><span ng-if=\"letter.key!=' '\">{{letter.key}}</span></span>\n" +
-    "       </div>\n" +
+    "      <div class=\"input-frame\"\n" +
+    "        ng-controller=\"tac.keyboard.qwerty.input\"\n" +
+    "        keyboard-input id=\"input-frame\"\n" +
+    "        navigable-leaf=\"input-frame\"\n" +
+    "        navigable-priority=\"0\"\n" +
+    "        >\n" +
+    "        <div class=\"input\" >\n" +
+    "          <span ng-repeat=\"letter in container.content.before_letters\"><span class=\"space\" ng-if=\"letter.key==' '\">_</span><span ng-if=\"letter.key!=' '\">{{letter.key}}</span></span>\n" +
+    "        </div>\n" +
+    "        <div class=\"cursor\" id=\"cursor\"></div>\n" +
+    "        <div class=\"input\">\n" +
+    "          <span ng-repeat=\"letter in container.content.after_letters\"><span class=\"space\" ng-if=\"letter.key==' '\">_</span><span ng-if=\"letter.key!=' '\">{{letter.key}}</span></span>\n" +
+    "        </div>\n" +
     "      </div>\n" +
-    "      <div class=\"letters-frame\" ng-controller=\"tac.keyboard.qwerty.letters\">\n" +
+    "      <div class=\"letters-frame\" \n" +
+    "        ng-controller=\"tac.keyboard.qwerty.letters\"\n" +
+    "        >\n" +
     "        <div ng-repeat=\"button in buttons\">\n" +
-    "          <div ng-include=\"'qwerty.' + button.kind +'.html'\"> </div>\n" +
+    "          <div ng-include=\"'qwerty.' + button.template +'.html'\" ></div>\n" +
     "        </div>\n" +
     "      </div>\n" +
     "      <div class=\"actions-frame\" \n" +
-    "        ng-controller=\"tac.navigable.horizontal\"\n" +
-    "        identifier=\"image header\" \n" +
-    "        priority=\"1\"\n" +
+    "        navigable-horizontal=\"actions frame\"\n" +
+    "        navigable-priority=\"2\"\n" +
     "        >\n" +
     "        <a class=\"button shift\" \n" +
     "          ng-click=\"$parent.shift()\"\n" +
-    "          navigable-leaf=\"0\"\n" +
-    "          navigable-leaf-id=\"shift-button\"\n" +
-    "          navigable-leaf-class=\"hover\"\n" +
+    "          navigable-leaf=\"shift-button\"\n" +
+    "          navigable-priority=\"0\"\n" +
     "          href>\n" +
+    "          <div class=\"caps-lock-container\">\n" +
+    "            <div ng-show=\"caps_lock\" class=\"caps-lock\">\n" +
+    "            </div>\n" +
+    "          </div>\n" +
     "          <svg class=\"shift-icon\" inline-svg-model=\"{{assets}}/qwerty/shift.svg\"></svg>\n" +
     "        </a>\n" +
     "        <a class=\"button simbols\" \n" +
     "          ng-click=\"$parent.simbol()\"\n" +
-    "          navigable-leaf=\"1\"\n" +
-    "          navigable-leaf-id=\"simbol-button\"\n" +
-    "          navigable-leaf-class=\"hover\"\n" +
+    "          navigable-leaf=\"simbol-button\"\n" +
+    "          navigable-priority=\"1\"\n" +
     "          href>\n" +
     "          <span>#$%</span>\n" +
     "        </a>\n" +
     "        <a class=\"button space\" \n" +
     "          ng-click=\"tap_space()\"\n" +
-    "          navigable-leaf=\"2\"\n" +
-    "          navigable-leaf-id=\"space-button\"\n" +
-    "          navigable-leaf-class=\"hover\"\n" +
+    "          navigable-leaf=\"space-button\"\n" +
+    "          navigable-priority=\"2\"\n" +
     "          href>\n" +
     "          <span>espacio</span>\n" +
     "        </a>\n" +
     "        <a class=\"button delete\"\n" +
     "          ng-click=\"container.content.remove_one()\"\n" +
-    "          navigable-leaf=\"3\"\n" +
-    "          navigable-leaf-id=\"delete-button\"\n" +
-    "          navigable-leaf-class=\"hover\"\n" +
+    "          navigable-leaf=\"delete-button\"\n" +
+    "          navigable-priority=\"3\"\n" +
     "          href>\n" +
     "          <span>borrar</span>\n" +
     "        </a>\n" +
@@ -569,29 +592,25 @@ angular.module('module.tac.keyboard').run(['$templateCache', function($templateC
     "  \n" +
     "  <div class=\"modal-footer\">\n" +
     "    <div class=\"modal-controls\"\n" +
-    "      ng-controller=\"tac.navigable.horizontal\"\n" +
-    "      identifier=\"image header\" \n" +
-    "      priority=\"2\">\n" +
+    "      navigable-horizontal=\"keyboard controls\"\n" +
+    "      navigable-priority=\"2\">\n" +
     "      <a class=\"modal-close\" \n" +
-    "        navigable-leaf=\"2\"\n" +
-    "        navigable-leaf-id=\"resume image modal\"\n" +
-    "        navigable-leaf-class=\"hover\" \n" +
+    "        navigable-priority=\"2\"\n" +
+    "        navigable-leaf=\"confirm keyboard\"\n" +
     "        ng-click=\"confirm()\"\n" +
     "        href >\n" +
     "        Aceptar\n" +
     "      </a>\n" +
-    "      <a class=\"modal-resume\" \n" +
-    "        navigable-leaf=\"1\"\n" +
-    "        navigable-leaf-id=\"resume image modal\"\n" +
-    "        navigable-leaf-class=\"hover\" \n" +
+    "      <a class=\"modal-resume\"\n" +
+    "        navigable-priority=\"1\"\n" +
+    "        navigable-leaf=\"resume keyboard\"\n" +
     "        ng-click=\"resume()\"\n" +
     "        href >\n" +
     "        Cancelar\n" +
     "      </a>\n" +
     "      <a class=\"keyboard-next\" \n" +
-    "        navigable-leaf=\"0\"\n" +
-    "        navigable-leaf-id=\"resume image modal\"\n" +
-    "        navigable-leaf-class=\"hover\" \n" +
+    "        navigable-priority=\"0\"\n" +
+    "        navigable-leaf=\"to t9 keyboard\"\n" +
     "        ng-click=\"container.to_t9()\"\n" +
     "        href >\n" +
     "        Teclado T9\n" +
@@ -599,6 +618,37 @@ angular.module('module.tac.keyboard').run(['$templateCache', function($templateC
     "    </div>\n" +
     "  </div>\n" +
     "</div>"
+  );
+
+
+  $templateCache.put('qwerty.simple.html',
+    "<a class=\"button key-button\" \n" +
+    "  ng-click=\"tap_special(button)\"\n" +
+    "  navigable-leaf=\"button simple\"\n" +
+    "  href>\n" +
+    "  <div ng-hide=\"has_simbol\">\n" +
+    "    {{button.content}}\n" +
+    "  </div>\n" +
+    "  <div ng-show=\"has_simbol\">\n" +
+    "    {{button.special}}\n" +
+    "  </div>\n" +
+    "</a>\n"
+  );
+
+
+  $templateCache.put('qwerty.special.html',
+    "<a class=\"button key-button-special\" \n" +
+    "  ng-click=\"tap_special(button)\"\n" +
+    "  navigable-leaf=\"button special\"\n" +
+    "  navigable-leaf-active=\"$index==0\"\n" +
+    "  href>\n" +
+    "  <div ng-hide=\"has_simbol\">\n" +
+    "    {{button.content}}\n" +
+    "  </div>\n" +
+    "  <div ng-show=\"has_simbol\">\n" +
+    "    {{button.special}}\n" +
+    "  </div>\n" +
+    "</a>"
   );
 
 }]);
@@ -827,6 +877,9 @@ angular.module('module.tac.keyboard').run(['$templateCache', function($templateC
             }
           }
         ]
+      };
+      controller.handlers['delete'] = controller.handlers.letter = controller.handlers.alt_gr = controller.handlers.shift = function(code, owner) {
+        return container.to_qwerty();
       };
       controller.initialize();
       container.content.sanitize();

@@ -28,9 +28,10 @@
 
 $keyboard-width: 726px;
 $keyboard-menu: 140px;
-$keyboard-go-back: 100px;
+$keyboard-go-back: 120px;
 
 
+.modal-open .modal.t9-dialog,
 .modal.t9-dialog{
   height: 720px;
   overflow-y: hidden;
@@ -39,6 +40,7 @@ $keyboard-go-back: 100px;
   }
   .modal-dialog{
     width: $keyboard-width + 40;
+    height: 670px;
     .modal-content{
       box-shadow:none;
       border:none;
@@ -270,6 +272,7 @@ $keyboard-go-back: 100px;
                 color: white;
                 font-size: 32px;
                 line-height: 90px;
+                text-align: center;
               }
               .option-key{
                 width: 10%;

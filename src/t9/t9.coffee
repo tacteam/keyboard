@@ -189,6 +189,14 @@ angular.module('module.tac.keyboard')
           relapse:(button)-> 
             @once button
         ]
+        
+    controller.handlers['delete'] = 
+    controller.handlers.letter =
+    controller.handlers.alt_gr =
+    controller.handlers.shift = 
+      (code, owner)->
+        container.to_qwerty()
+    
     
     controller.initialize()
     container.content.sanitize()
