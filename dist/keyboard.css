@@ -1,3 +1,4 @@
+@import url(http://fonts.googleapis.com/css?family=Roboto:400,300,500,700italic,400italic,300italic);
 @-webkit-keyframes blink {
   0% {
     opacity: 1.0;
@@ -35,6 +36,7 @@
   min-width: 800px;
   margin: 30px auto 0 auto;
   overflow-y: hidden;
+  height: 690px;
 }
 .modal.qwerty-dialog .modal-dialog .modal-content {
   box-shadow: none;
@@ -49,36 +51,6 @@
   margin-left: 85px;
   height: 500px;
 }
-.modal.qwerty-dialog .modal-dialog .modal-content .modal-body .main-frame .imput-frame2 {
-  margin: 8px;
-  width: 784px;
-  height: 70px;
-  border: 1px solid white;
-}
-.modal.qwerty-dialog .modal-dialog .modal-content .modal-body .main-frame .imput-frame2 .input {
-  float: left;
-  width: auto;
-  height: 70px;
-  font-family: 'Roboto';
-  font-weight: 300;
-  font-size: 36px;
-  text-indent: 10px;
-  color: white;
-  border: none;
-  line-height: 70px;
-}
-.modal.qwerty-dialog .modal-dialog .modal-content .modal-body .main-frame .imput-frame2 .cursor {
-  float: left;
-  display: block;
-  margin-top: 10px;
-  margin-left: 3px;
-  width: 5px;
-  height: 50px;
-  background-color: white;
-  -moz-animation: blink 1s step-start 0s infinite;
-  -webkit-animation: blink 1s step-start 0s infinite;
-  animation: blink 1s step-start 0s infinite;
-}
 .modal.qwerty-dialog .modal-dialog .modal-content .modal-body .main-frame .input-frame {
   margin: 8px;
   padding-left: 10px;
@@ -87,7 +59,7 @@
   height: 70px;
   overflow: hidden;
   display: -webkit-box;
-  border: 3px solid white;
+  border: 3px solid #BBB;
 }
 .modal.qwerty-dialog .modal-dialog .modal-content .modal-body .main-frame .input-frame .input {
   margin: 0;
@@ -116,10 +88,16 @@
   margin: 10px 3px 0 6px;
   width: 5px;
   height: 50px;
-  background-color: white;
+  background-color: #BBB;
   -moz-animation: blink 1s step-start 0s infinite;
   -webkit-animation: blink 1s step-start 0s infinite;
   animation: blink 1s step-start 0s infinite;
+}
+.modal.qwerty-dialog .modal-dialog .modal-content .modal-body .main-frame .input-frame.hover {
+  border: 3px solid white;
+}
+.modal.qwerty-dialog .modal-dialog .modal-content .modal-body .main-frame .input-frame.hover .cursor {
+  background-color: white;
 }
 .modal.qwerty-dialog .modal-dialog .modal-content .modal-body .main-frame .letters-frame .button,
 .modal.qwerty-dialog .modal-dialog .modal-content .modal-body .main-frame .actions-frame .button {
@@ -158,6 +136,22 @@
 .modal.qwerty-dialog .modal-dialog .modal-content .modal-body .main-frame .letters-frame .button.shift .shift-icon *,
 .modal.qwerty-dialog .modal-dialog .modal-content .modal-body .main-frame .actions-frame .button.shift .shift-icon * {
   fill: #FFF;
+}
+.modal.qwerty-dialog .modal-dialog .modal-content .modal-body .main-frame .letters-frame .button.shift .caps-lock-container,
+.modal.qwerty-dialog .modal-dialog .modal-content .modal-body .main-frame .actions-frame .button.shift .caps-lock-container {
+  float: right;
+  width: 0px;
+  height: 0px;
+}
+.modal.qwerty-dialog .modal-dialog .modal-content .modal-body .main-frame .letters-frame .button.shift .caps-lock-container .caps-lock,
+.modal.qwerty-dialog .modal-dialog .modal-content .modal-body .main-frame .actions-frame .button.shift .caps-lock-container .caps-lock {
+  position: relative;
+  right: 20px;
+  top: 7px;
+  background-color: #04B90A;
+  width: 14px;
+  height: 14px;
+  border-radius: 7px;
 }
 .modal.qwerty-dialog .modal-dialog .modal-content .modal-body .main-frame .letters-frame .button.shift, .modal.qwerty-dialog .modal-dialog .modal-content .modal-body .main-frame .letters-frame .button.simbols,
 .modal.qwerty-dialog .modal-dialog .modal-content .modal-body .main-frame .actions-frame .button.shift,
@@ -256,30 +250,38 @@
   }
 }
 
+.modal-open .modal.t9-dialog,
 .modal.t9-dialog {
   height: 720px;
   overflow-y: hidden;
 }
+.modal-open .modal.t9-dialog *,
 .modal.t9-dialog * {
   box-sizing: content-box;
 }
+.modal-open .modal.t9-dialog .modal-dialog,
 .modal.t9-dialog .modal-dialog {
   width: 766px;
+  height: 670px;
 }
+.modal-open .modal.t9-dialog .modal-dialog .modal-content,
 .modal.t9-dialog .modal-dialog .modal-content {
   box-shadow: none;
   border: none;
   background-color: transparent;
 }
+.modal-open .modal.t9-dialog .modal-dialog .modal-content .modal-body,
 .modal.t9-dialog .modal-dialog .modal-content .modal-body {
   margin-top: 50px;
   padding: 20px;
   background-color: black;
 }
+.modal-open .modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame,
 .modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame {
   width: 726px;
   height: 500px;
 }
+.modal-open .modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .input-frame,
 .modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .input-frame {
   margin: 0;
   padding-left: 10px;
@@ -303,6 +305,7 @@
   background-image: linear-gradient(top, #5b7191, #3e4e65);
   filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,StartColorStr='#5b7191', EndColorStr='#3e4e65');
 }
+.modal-open .modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .input-frame .input,
 .modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .input-frame .input {
   margin: 0;
   height: 70px;
@@ -317,6 +320,7 @@
   display: block;
   white-space: nowrap;
 }
+.modal-open .modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .input-frame .input .space,
 .modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .input-frame .input .space {
   line-height: 60px;
   font-size: 40px;
@@ -324,6 +328,7 @@
   margin-left: 5px;
   margin-left: 5px;
 }
+.modal-open .modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .input-frame .cursor,
 .modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .input-frame .cursor {
   padding: 0 5px;
   display: block;
@@ -335,68 +340,84 @@
   -webkit-animation: blink 1s step-start 0s infinite;
   animation: blink 1s step-start 0s infinite;
 }
+.modal-open .modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .delay-frame,
 .modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .delay-frame {
   float: left;
   width: 726px;
   height: 4px;
 }
+.modal-open .modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .delay-frame .delay-bar,
 .modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .delay-frame .delay-bar {
   float: left;
   width: 0%;
   height: 4px;
   background-color: #88F;
 }
+.modal-open .modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .go-back-frame,
 .modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .go-back-frame {
   width: 586px;
   height: 60px;
   float: left;
 }
+.modal-open .modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .go-back-frame .go-back,
 .modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .go-back-frame .go-back {
   margin-top: 8px;
   float: left;
-  width: 100px;
+  width: 120px;
 }
+.modal-open .modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .go-back-frame .go-back .go-back-btn,
 .modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .go-back-frame .go-back .go-back-btn {
   float: left;
 }
+.modal-open .modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .go-back-frame .go-back .go-back-btn.pressed,
 .modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .go-back-frame .go-back .go-back-btn.pressed {
   border: 2px solid #cfdcec;
   color: #FFF;
 }
+.modal-open .modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .go-back-frame .go-back-description,
 .modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .go-back-frame .go-back-description {
   text-align: left;
   margin-top: 14px;
   font-size: 24px;
-  width: 486px;
+  width: 466px;
   float: left;
   color: white;
   font-weight: bold;
 }
+.modal-open .modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .menu-frame,
 .modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .menu-frame {
   width: 140px;
   height: 60px;
   float: right;
 }
+.modal-open .modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .menu-frame .menu,
 .modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .menu-frame .menu {
   margin-top: 8px;
   float: right;
 }
+.modal-open .modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .menu-frame .menu .menu-btn,
 .modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .menu-frame .menu .menu-btn {
   float: right;
 }
+.modal-open .modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .menu-frame .menu .menu-btn:hover,
 .modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .menu-frame .menu .menu-btn:hover {
   border: 2px solid #777;
   color: #AAA;
 }
+.modal-open .modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .menu-frame .menu.disable .menu-btn,
 .modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .menu-frame .menu.disable .menu-btn {
   background-color: #222;
   border: 2px solid #333;
   color: #555;
 }
-.modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .menu-frame .menu .menu-btn.pressed, .modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .menu-frame .menu.disable .menu-btn.pressed {
+.modal-open .modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .menu-frame .menu .menu-btn.pressed, .modal-open .modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .menu-frame .menu.disable .menu-btn.pressed,
+.modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .menu-frame .menu .menu-btn.pressed,
+.modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .menu-frame .menu.disable .menu-btn.pressed {
   border: 2px solid #777;
   color: #AAA;
 }
+.modal-open .modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .menu-frame .menu .menu-btn,
+.modal-open .modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .go-back-frame .go-back .go-back-btn,
 .modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .menu-frame .menu .menu-btn,
 .modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .go-back-frame .go-back .go-back-btn {
   border-radius: 10px;
@@ -411,6 +432,8 @@
   font-weight: bold;
   text-decoration: none;
 }
+.modal-open .modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .buttons-frame .button,
+.modal-open .modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .buttons-frame .modes,
 .modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .buttons-frame .button,
 .modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .buttons-frame .modes {
   text-transform: none;
@@ -434,11 +457,13 @@
   background-image: linear-gradient(top, #1a222c, #0e1720);
   filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,StartColorStr='#1a222c', EndColorStr='#0e1720');
 }
+.modal-open .modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .buttons-frame .modes,
 .modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .buttons-frame .modes {
   padding: 15px 70px;
   width: 100px;
   height: 60px;
 }
+.modal-open .modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .buttons-frame .modes .mode,
 .modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .buttons-frame .modes .mode {
   float: left;
   width: 50px;
@@ -452,14 +477,17 @@
   line-height: 35px;
   text-align: center;
 }
+.modal-open .modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .buttons-frame .modes .mode.symbol,
 .modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .buttons-frame .modes .mode.symbol {
   font-size: 20px;
   line-height: 40px;
 }
+.modal-open .modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .buttons-frame .modes .mode.selected,
 .modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .buttons-frame .modes .mode.selected {
   font-weight: bold;
   color: #FFF;
 }
+.modal-open .modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .buttons-frame .button,
 .modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .buttons-frame .button {
   width: 240px;
   height: 90px;
@@ -473,30 +501,40 @@
   line-height: 90px;
   text-align: center;
 }
+.modal-open .modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .buttons-frame .button .symbol,
 .modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .buttons-frame .button .symbol {
   display: block-inline;
   width: 20px;
 }
-.modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .buttons-frame .button.pressed, .modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .buttons-frame .button:hover {
+.modal-open .modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .buttons-frame .button.pressed, .modal-open .modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .buttons-frame .button:hover,
+.modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .buttons-frame .button.pressed,
+.modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .buttons-frame .button:hover {
   background-color: black;
   color: #333;
 }
-.modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .buttons-frame .button.pressed .svg-button *, .modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .buttons-frame .button:hover .svg-button * {
+.modal-open .modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .buttons-frame .button.pressed .svg-button *, .modal-open .modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .buttons-frame .button:hover .svg-button *,
+.modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .buttons-frame .button.pressed .svg-button *,
+.modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .buttons-frame .button:hover .svg-button * {
   fill: #333;
 }
+.modal-open .modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .buttons-frame .button .svg-button,
 .modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .buttons-frame .button .svg-button {
   padding-top: 14px;
 }
+.modal-open .modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .buttons-frame .button .svg-button svg,
 .modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .buttons-frame .button .svg-button svg {
   width: 60px;
   height: 50px;
 }
+.modal-open .modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .buttons-frame .button .svg-button *,
 .modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .buttons-frame .button .svg-button * {
   fill: #FFF;
 }
+.modal-open .modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .options-frame,
 .modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .options-frame {
   margin-top: 80px;
 }
+.modal-open .modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .options-frame .option,
 .modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .options-frame .option {
   width: 726px;
   text-transform: none;
@@ -520,6 +558,8 @@
   background-image: linear-gradient(top, #1a222c, #0e1720);
   filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,StartColorStr='#1a222c', EndColorStr='#0e1720');
 }
+.modal-open .modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .options-frame .option .option-key,
+.modal-open .modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .options-frame .option .option-description,
 .modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .options-frame .option .option-key,
 .modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .options-frame .option .option-description {
   float: left;
@@ -530,14 +570,19 @@
   color: white;
   font-size: 32px;
   line-height: 90px;
+  text-align: center;
 }
+.modal-open .modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .options-frame .option .option-key,
 .modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .options-frame .option .option-key {
   width: 10%;
 }
+.modal-open .modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .options-frame .option .option-description,
 .modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .options-frame .option .option-description {
   width: 90%;
   text-align: left;
 }
+.modal-open .modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .options-frame .option:hover .option-key,
+.modal-open .modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .options-frame .option:hover .option-description,
 .modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .options-frame .option:hover .option-key,
 .modal.t9-dialog .modal-dialog .modal-content .modal-body .main-frame .options-frame .option:hover .option-description {
   background-color: #111;

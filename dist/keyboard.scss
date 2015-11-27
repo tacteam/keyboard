@@ -1,3 +1,4 @@
+@import url(http://fonts.googleapis.com/css?family=Roboto:400,300,500,700italic,400italic,300italic);
 
 @-webkit-keyframes blink {
   0% { opacity: 1.0; }
@@ -25,6 +26,7 @@
     min-width: 800px;
     margin: 30px auto 0 auto;
     overflow-y: hidden;
+    height: 690px;
     .modal-content{
       box-shadow:none;
       border:none;
@@ -35,34 +37,6 @@
           width: 840px;
           margin-left:85px;
           height: 500px;
-          .imput-frame2{
-            margin: 8px;
-            width: 784px;
-            height: 70px;
-            border: 1px solid white;
-            .input{
-              float: left;
-              width: auto;
-              height: 70px;
-              font-family: 'Roboto';
-              font-weight: 300;
-              font-size: 36px;
-              text-indent: 10px;
-              color: white;
-              border: none;
-              line-height: 70px;
-            }
-            .cursor{
-              float: left;
-              display:block;
-              margin-top: 10px;
-              margin-left: 3px;
-              width: 5px;
-              height: 50px;
-              background-color: white;
-              @include cursor-blink;
-            }
-          }
           .input-frame{
             margin: 8px;
             padding-left: 10px;
@@ -71,7 +45,7 @@
             height: 70px;
             overflow: hidden;
             display: -webkit-box;
-            border: 3px solid white;
+            border: 3px solid #BBB;
             .input{
               margin: 0;
               height: 70px;
@@ -99,8 +73,14 @@
               margin: 10px 3px 0 6px;
               width: 5px;
               height: 50px;
-              background-color: white;
+              background-color: #BBB;
               @include cursor-blink;
+            }
+            &.hover{
+              border: 3px solid white;
+              .cursor{
+                background-color: white;
+              }
             }
           }
           .letters-frame,
@@ -135,6 +115,20 @@
                 }
                 .shift-icon *{
                   fill: #FFF;
+                }
+                .caps-lock-container {
+                  float: right;
+                  width: 0px;
+                  height: 0px;
+                  .caps-lock {
+                    position: relative;
+                    right:20px;
+                    top:7px;
+                    background-color:#04B90A;
+                    width: 14px;
+                    height: 14px;
+                    border-radius: 7px;
+                  }
                 }
               }
               &.shift,
@@ -245,9 +239,10 @@
 
 $keyboard-width: 726px;
 $keyboard-menu: 140px;
-$keyboard-go-back: 100px;
+$keyboard-go-back: 120px;
 
 
+.modal-open .modal.t9-dialog,
 .modal.t9-dialog{
   height: 720px;
   overflow-y: hidden;
@@ -256,6 +251,7 @@ $keyboard-go-back: 100px;
   }
   .modal-dialog{
     width: $keyboard-width + 40;
+    height: 670px;
     .modal-content{
       box-shadow:none;
       border:none;
@@ -487,6 +483,7 @@ $keyboard-go-back: 100px;
                 color: white;
                 font-size: 32px;
                 line-height: 90px;
+                text-align: center;
               }
               .option-key{
                 width: 10%;
